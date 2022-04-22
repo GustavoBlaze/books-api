@@ -1,4 +1,6 @@
 import { gql } from 'apollo-server';
+// eslint-disable-next-line import/no-cycle
+import { Controller as BookController } from '../books';
 
 class BookGenderController {
   private _genders: BookGender[] = [
@@ -17,8 +19,6 @@ class BookGenderController {
 
     return gender;
   }
-
-  // public getBooksByGenderId(genderId: String): Book[] {}
 }
 
 export const Controller = new BookGenderController();
@@ -28,12 +28,12 @@ export const graphql = {
     type BookGender {
       id: ID!
       name: String!
+      books: [Book!]
     }
 
     type Query {
       bookGenders: [BookGender!]
       bookGender(id: ID!): BookGender!
-      getBooksByGenderId(id: ID): [Book!]
     }
   `,
 
@@ -47,5 +47,13 @@ export const graphql = {
     Mutation: {},
   },
 
-  customResolvers: {},
+  customResolvers: {
+    BookGender: {
+      books(parent) {
+        return BookController.books.filter(
+          (book) => book.genderId === parent.id,
+        );
+      },
+    },
+  },
 };

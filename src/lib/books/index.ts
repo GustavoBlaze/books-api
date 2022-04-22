@@ -1,4 +1,5 @@
 import { gql, UserInputError } from 'apollo-server';
+// eslint-disable-next-line import/no-cycle
 import { Controller as BookGenderController } from '../book-genders';
 
 interface IBookUpdate {
