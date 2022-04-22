@@ -13,6 +13,7 @@
   "rules": {
     "prettier/prettier": "error",
     "no-underscore-dangle": "off",
+    "no-undef": "off",
     "import/extensions": [
       "error",
       "ignorePackages",

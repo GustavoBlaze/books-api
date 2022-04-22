@@ -1,12 +1,21 @@
+import { DocumentNode } from 'graphql';
 import * as Books from './lib/books';
+import * as BookGenders from './lib/book-genders';
 
-export const typeDefs = [Books.graphql.typeDef];
+const entities = [Books, BookGenders];
 
-export const resolvers = {
-  Query: {
-    ...Books.graphql.resolvers.Query,
-  },
-  Mutation: {
-    ...Books.graphql.resolvers.Mutation,
-  },
+const typeDefs: DocumentNode[] = [];
+
+const resolvers = {
+  Query: {},
+  Mutation: {},
 };
+
+entities.forEach((entity) => {
+  Object.assign(resolvers.Query, entity.graphql.resolvers.Query);
+  Object.assign(resolvers.Mutation, entity.graphql.resolvers.Mutation);
+  Object.assign(resolvers, entity.graphql.customResolvers);
+  typeDefs.push(entity.graphql.typeDef);
+});
+
+export { typeDefs, resolvers };
